@@ -18,7 +18,7 @@
         <quarkus.github-action.version>2.4.0</quarkus.github-action.version>
         <assertj.version>3.26.3</assertj.version>
         <compiler-plugin.version>3.13.0</compiler-plugin.version>
-        <surefire-plugin.version>3.2.5</surefire-plugin.version>
+        <surefire-plugin.version>3.4.0</surefire-plugin.version>
     </properties>
 
     <dependencyManagement>
