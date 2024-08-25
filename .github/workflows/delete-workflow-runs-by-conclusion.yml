@@ -1,0 +1,23 @@
+name: Delete Workflow Runs by Conclusion
+
+on:
+  workflow_dispatch:
+    inputs:
+      conclusions:
+        description: "Conclusions"
+        type: string
+        default: "cancelled, skipped, success"
+
+jobs:
+  exec:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: read
+    steps:
+      - name: Delete workflow runs for '${{ inputs.conclusions }}' conclusions
+        uses: gcw-it/github-action@v1
+        with:
+          action: "delete-workflow-runs-by-conclusion"
+          conclusions: ${{ inputs.conclusions || 'cancelled, skipped, success' }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}

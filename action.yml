@@ -1,11 +1,17 @@
 name: 'GitHub Actions'
-description: 'Collection of  GitHub Actions'
+description: 'Collection of GitHub Actions'
 inputs:
   github-token:
     description: 'GitHub token'
     required: true
   action:
     description: 'Name of the action (if named)'
+    required: false
+  conclusions:
+    description: 'Comma separated list of workflow run conclusions'
+    required: false
+  age:
+    description: 'Minimum age for workflow runs to be deleted'
     required: false
 
 runs:
@@ -33,11 +39,17 @@ runs:
         </settings>
         EOF
         fi
+    - name: Checkout repo
+      uses: actions/checkout@v4
+    - name: Get project version
+      shell: bash
+      run: |
+        echo "ACTION_VERSION=$(mvn org.apache.maven.plugins:maven-help-plugin:3.5.0:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
     - name: Set up JBang
       uses: jbangdev/setup-jbang@main
-    - name: Run the action
+    - name: Run action
       id: action
-      run: jbang --java 21 --fresh --repos 'quarkus-github-action=https://maven.pkg.github.com/gcw-it/github-action/' --repos 'mavencentral' de.wenda-it:github-action:1.0
+      run: jbang --java 21 --fresh --repos 'quarkus-github-action=https://maven.pkg.github.com/gcw-it/github-action/' --repos 'central' de.wenda-it:github-action:${{ env.ACTION_VERSION }}
       shell: bash
       env:
         JSON_INPUTS: ${{ toJSON(inputs) }}

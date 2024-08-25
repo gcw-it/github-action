@@ -1,0 +1,23 @@
+name: Delete Workflow Runs by Age
+
+on:
+  workflow_dispatch:
+    inputs:
+      age:
+        description: "Age (days)"
+        type: number
+        default: 7
+
+jobs:
+  exec:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: read
+    steps:
+      - name: Delete workflow runs older than ${{ inputs.age }} days
+        uses: gcw-it/github-action@v1
+        with:
+          action: "delete-workflow-runs-by-age"
+          age: ${{ inputs.age || 7 }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}

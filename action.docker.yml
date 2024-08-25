@@ -1,5 +1,5 @@
 name: 'GitHub Actions'
-description: 'Collection of  GitHub Actions'
+description: 'Collection of GitHub Actions'
 inputs:
   github-token:
     description: 'GitHub token'
