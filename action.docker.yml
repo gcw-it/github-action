@@ -1,0 +1,9 @@
+name: 'GitHub Actions'
+description: 'Collection of  GitHub Actions'
+inputs:
+  github-token:
+    description: 'GitHub token'
+    required: false
+runs:
+  using: 'docker'
+  image: 'docker://ghcr.io/gcw-it/github-action:main'
