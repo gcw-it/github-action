@@ -1,0 +1,16 @@
+name: Delete Workflow Runs
+
+
+on:
+  workflow_dispatch:
+
+jobs:
+  exec:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete workflow runs for 'cancelled', 'skipped' & 'success' conclusions
+        uses: gcw-it/github-action@v1
+        with:
+          action: "delete-workflow-runs-by-age"
+          age: "30"
+          github-token: ${{ secrets.GITHUB_TOKEN }}

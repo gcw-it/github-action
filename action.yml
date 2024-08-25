@@ -1,5 +1,5 @@
 name: 'GitHub Actions'
-description: 'Collection of  GitHub Actions'
+description: 'Collection of GitHub Actions'
 inputs:
   github-token:
     description: 'GitHub token'
@@ -7,6 +7,14 @@ inputs:
   action:
     description: 'Name of the action (if named)'
     required: false
+  conclusions:
+    description: 'Comma separated list of workflow run conclusions'
+    required: true
+    default: 'cancelled,success'
+  age:
+    description: 'Minimum age for workflow runs to be deleted'
+    required: true
+    default: "14"
 
 runs:
   using: "composite"
@@ -35,9 +43,9 @@ runs:
         fi
     - name: Set up JBang
       uses: jbangdev/setup-jbang@main
-    - name: Run the action
+    - name: Run action
       id: action
-      run: jbang --java 21 --fresh --repos 'quarkus-github-action=https://maven.pkg.github.com/gcw-it/github-action/' --repos 'mavencentral' de.wenda-it:github-action:1.0
+      run: jbang --java 21 --fresh --repos 'quarkus-github-action=https://maven.pkg.github.com/gcw-it/github-action/' --repos 'central' de.wenda-it:github-action:1.0
       shell: bash
       env:
         JSON_INPUTS: ${{ toJSON(inputs) }}
