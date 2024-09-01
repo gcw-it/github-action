@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.wenda-it</groupId>
     <artifactId>github-action</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
     <name>GitHub Actions</name>
     <description>Collection of GitHub Actions</description>
 
@@ -14,13 +14,13 @@
         <skipITs>true</skipITs>
         <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-        <quarkus.platform.version>3.13.3</quarkus.platform.version>
+        <quarkus.platform.version>3.14.1</quarkus.platform.version>
         <quarkus.github-action.version>2.4.0</quarkus.github-action.version>
         <assertj.version>3.26.3</assertj.version>
         <spotbugs.version>4.8.6</spotbugs.version>
         <infradna.version>1.24</infradna.version>
         <compiler-plugin.version>3.13.0</compiler-plugin.version>
-        <surefire-plugin.version>3.4.0</surefire-plugin.version>
+        <surefire-plugin.version>3.5.0</surefire-plugin.version>
     </properties>
 
     <dependencyManagement>

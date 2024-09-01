@@ -7,6 +7,7 @@ import java.time.Period;
 import java.time.temporal.TemporalAmount;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Map;
 import java.util.Optional;
@@ -58,14 +59,20 @@ public class InputsParser {
         }
 
         private ConclusionsResult(Map<String,Conclusion> conclusionMap) {
-            validConclusions = conclusionMap.values().stream()
-                    .filter(not(Conclusion.UNKNOWN::equals))
-                    .collect(Collectors.toCollection(() ->EnumSet.noneOf(Conclusion.class)));
+            if (conclusionMap.size() == 1 && conclusionMap.containsKey("all")) {
+                validConclusions = EnumSet.allOf(Conclusion.class);
+                invalidConclusions = Collections.emptySet();
+            } else {
+                validConclusions = conclusionMap.values().stream()
+                        .filter(not(Conclusion.UNKNOWN::equals))
+                        .collect(Collectors.toCollection(() ->EnumSet.noneOf(Conclusion.class)));
 
-            invalidConclusions = conclusionMap.entrySet().stream()
-                    .filter(entry -> entry.getValue().equals(Conclusion.UNKNOWN))
-                    .map(Map.Entry::getKey)
-                    .collect(Collectors.toSet());
+                invalidConclusions = conclusionMap.entrySet().stream()
+                        .filter(entry -> entry.getValue().equals(Conclusion.UNKNOWN))
+                        .map(Map.Entry::getKey)
+                        .collect(Collectors.toSet());
+
+            }
         }
 
         public Collection<Conclusion> validConclusions() {

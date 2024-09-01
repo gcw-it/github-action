@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Period;
+import java.util.EnumSet;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -64,6 +65,36 @@ class InputsParserTest {
         var expected = ("invalid1/invalid2");
         var sut = InputsParser.of(inputs).conclusions();
         assertThat(sut.invalidConclusions("/")).isEqualTo(expected);
+    }
+
+    @Test
+    void shouldReturnAllConclusions() {
+        var given = "all";
+        when(inputs.get(matches("conclusions"))).thenReturn(Optional.of(given));
+
+        var validExpected = EnumSet.allOf(Conclusion.class);
+        var invalidExpected = "";
+        var sut = InputsParser.of(inputs).conclusions();
+
+        var softly = new SoftAssertions();
+        softly.assertThat(sut.validConclusions()).isEqualTo(validExpected);
+        softly.assertThat(sut.invalidConclusions(",")).isEqualTo(invalidExpected);
+        softly.assertAll();
+    }
+
+    @Test
+    void shouldSkipAllIfNotSingle() {
+        var given = "all, success, invalid1";
+        when(inputs.get(matches("conclusions"))).thenReturn(Optional.of(given));
+
+        var validExpected = new Conclusion[] { SUCCESS };
+        var invalidExpected = "all,invalid1";
+        var sut = InputsParser.of(inputs).conclusions();
+
+        var softly = new SoftAssertions();
+        softly.assertThat(sut.validConclusions()).containsExactly(validExpected);
+        softly.assertThat(sut.invalidConclusions(",")).isEqualTo(invalidExpected);
+        softly.assertAll();
     }
 
     @Test
