@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.time.Instant;
 import java.time.temporal.TemporalAmount;
 import java.util.Collection;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static org.kohsuke.github.GHWorkflowRun.Status.COMPLETED;
@@ -24,19 +25,25 @@ public class WorkflowRunResolver {
         }
     }
 
-    private WorkflowRunResolver(Collection<GHWorkflowRun> completedWorkflowRuns) {
-        this.completedWorkflowRuns = completedWorkflowRuns;
-    }
-
-    public Collection<GHWorkflowRun> completedRuns(Collection<Conclusion> conclusions) {
-        return completedWorkflowRuns.stream()
-                .filter(run -> conclusions.contains(run.getConclusion()))
-                .collect(Collectors.toSet());
+    private WorkflowRunResolver(Collection<GHWorkflowRun> workflowRuns) {
+        completedWorkflowRuns = workflowRuns;
     }
 
     public Collection<GHWorkflowRun> completedRuns(TemporalAmount age) {
+        return completedRuns(run -> isBefore(age, run));
+    }
+
+    public Collection<GHWorkflowRun> completedRuns(Collection<Conclusion> conclusions) {
+        return completedRuns(run -> conclusions.contains(run.getConclusion()));
+    }
+
+    public Collection<GHWorkflowRun> completedRuns(TemporalAmount age, Collection<Conclusion> conclusions) {
+        return completedRuns(run -> isBefore(age, run) && conclusions.contains(run.getConclusion()));
+    }
+
+    private Collection<GHWorkflowRun> completedRuns(Predicate<GHWorkflowRun> predicate) {
         return completedWorkflowRuns.stream()
-                .filter(run -> isBefore(age, run))
+                .filter(predicate)
                 .collect(Collectors.toSet());
     }
 

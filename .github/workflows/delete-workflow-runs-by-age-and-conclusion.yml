@@ -1,0 +1,28 @@
+name: Delete Workflow Runs by Age and Conclusion
+
+on:
+  workflow_dispatch:
+    inputs:
+      age:
+        description: "Age (days)"
+        type: number
+        default: 7
+      conclusions:
+        description: "Conclusions"
+        type: string
+        default: "cancelled, skipped, success"
+
+jobs:
+  exec:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: read
+    steps:
+      - name: Delete workflow runs older than ${{ inputs.age }} days for '${{ inputs.conclusions }}' conclusions
+        uses: gcw-it/github-action@v1
+        with:
+          action: "delete-workflow-runs-by-age-and-conclusion"
+          age: ${{ inputs.age || 7 }}
+          conclusions: ${{ inputs.conclusions || 'cancelled, skipped, success' }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}

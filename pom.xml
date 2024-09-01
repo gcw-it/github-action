@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.wenda-it</groupId>
     <artifactId>github-action</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <name>GitHub Actions</name>
     <description>Collection of GitHub Actions</description>
 
@@ -17,6 +17,8 @@
         <quarkus.platform.version>3.13.3</quarkus.platform.version>
         <quarkus.github-action.version>2.4.0</quarkus.github-action.version>
         <assertj.version>3.26.3</assertj.version>
+        <spotbugs.version>4.8.6</spotbugs.version>
+        <infradna.version>1.24</infradna.version>
         <compiler-plugin.version>3.13.0</compiler-plugin.version>
         <surefire-plugin.version>3.4.0</surefire-plugin.version>
     </properties>
@@ -39,6 +41,16 @@
                 <groupId>org.assertj</groupId>
                 <artifactId>assertj-core</artifactId>
                 <version>${assertj.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-annotations</artifactId>
+                <version>${spotbugs.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.infradna.tool</groupId>
+                <artifactId>bridge-method-annotation</artifactId>
+                <version>${infradna.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -66,6 +78,19 @@
             <artifactId>quarkus-junit5-mockito</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- prevent compilation warnings for the following annotations -->
+        <dependency>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs-annotations</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.infradna.tool</groupId>
+            <artifactId>bridge-method-annotation</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -90,7 +115,13 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${compiler-plugin.version}</version>
                 <configuration>
+                    <compilerArgs>
+                        <arg>-Xlint:all,-processing</arg>
+                    </compilerArgs>
+                    <failOnWarning>true</failOnWarning>
                     <parameters>true</parameters>
+                    <proc>full</proc>
+                    <showDeprecation>true</showDeprecation>
                 </configuration>
             </plugin>
             <plugin>
