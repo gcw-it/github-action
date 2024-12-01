@@ -20,7 +20,7 @@
         <spotbugs.version>4.8.6</spotbugs.version>
         <infradna.version>1.24</infradna.version>
         <compiler-plugin.version>3.13.0</compiler-plugin.version>
-        <surefire-plugin.version>3.5.0</surefire-plugin.version>
+        <surefire-plugin.version>3.5.2</surefire-plugin.version>
     </properties>
 
     <dependencyManagement>
